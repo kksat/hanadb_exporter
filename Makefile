@@ -35,7 +35,11 @@ coverage: tests/coverage.xml tests/htmlcov tests/.coverage
 tests/coverage.xml tests/htmlcov tests/.coverage:
 	tox -e coverage
 
-clean:
+.PHONY: clean-venv
+clean-venv:  # clean virtualenv
+	rm -rf .venv/
+
+clean: clean-venv
 	rm -rf .tox tests/{coverage.xml,.coverage,htmlcov} build
 
 exporter-obs-workdir: build/obs/prometheus-hanadb_exporter
@@ -73,3 +77,8 @@ dashboards-obs-commit: dashboards-obs-workdir
 	cd build/obs/grafana-sap-hana-dashboards; osc commit -m "Update from git rev $(REVISION)"
 
 .PHONY: checks clean coverage deps static-checks test test-all
+
+.venv/bin/activate:  # create virtualenv
+	python3 -m venv .venv
+	.venv/bin/pip install -r requirements.txt
+	.venv/bin/pip install -r requirements-dev.txt

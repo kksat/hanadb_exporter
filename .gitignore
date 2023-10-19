@@ -12,3 +12,4 @@ config.json
 .vscode
 .pytest_cache
 /build
+.venv/
